@@ -1,3 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+<body>
+
 <?php
   $db_host = 'localhost';
   $db_user = 'root';
@@ -26,32 +38,8 @@
   echo 'Protocol version: '.$mysqli->protocol_version;
 
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>Bootstrap Example</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-</head>
-<body>
-  
-<div class="container">
-  <h1>My First Bootstrap Page</h1>
-  <p>This part is inside a .container class.</p> 
-  <p>The .container class provides a responsive fixed width container.</p>
-  <form method="post">
- 	<p>Customer name: <input type="text" name="c_name" /></p>
- 	<p><input type="submit" /></p>
-  </form>           
-</div>
 
-</body>
-</html>
-
-$sql = "SELECT c_name FROM Customer WHERE c_name='Doe'";
+$sql = "SELECT c_name FROM Customer ";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {
@@ -63,6 +51,30 @@ if ($result->num_rows > 0) {
   echo "0 results";
 }
 
+echo '<form method="post" action="$_SERVER[PHP_SELF]">';
+echo 'Enter Customer name : <input type="text" name="cust_name">';
+echo '<br/>';
+echo '<input type="submit" value="Submit">'; 
+echo '</form>'; 
+
+if($_POST['cust_name']) {
+  $id = $_POST['cust_name'];
+  
+  $result = $conn->query($mysqli);
+  echo '<br/>';
+  while($row = $result->fetch_assoc()) {
+    if($row["c_name = $id"]){
+      print('Customer Name' . $row["c_name"].'<br>\n');
+    }
+  }
+  }
+
 
   $mysqli->close();
 ?>
+
+</body>
+</html>
+
+
+
