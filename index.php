@@ -26,6 +26,10 @@
 </nav>
 
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+	
+	
   $db_host = 'localhost';
   $db_user = 'studio';
   $db_password = 'studio';
@@ -53,7 +57,7 @@
   echo 'Protocol version: '.$mysqli->protocol_version;
 
 
-function($conn){
+function customers($conn){
 	$sql = "SELECT c_name FROM Customer";
 	$result = $conn->query($sql);
 
@@ -67,39 +71,32 @@ function($conn){
 	}
 }
 
-echo '<h2>Customer Search</h2>'
-echo '<form method="post" action="$_SERVER[PHP_SELF]">';
-echo 'Enter Customer name : <input type="text" name="cust_name">';
+echo '<h2>Customer Search</h2>';
+echo '<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">';
+echo 'Enter Customer name : <input type=\"text\" name=\"cust_name\">';
 echo '<br/>';
-echo '<input type="submit" value="Submit">'; 
+echo '<input type=\"submit\" value=\"Submit\">'; 
 echo '</form>'; 
 
 if($_POST['cust_name']) {
   $id = $_POST['cust_name'];
-  
-  $result = $conn->query($mysqli);
-  echo '<br/>';
-  while($row = $result->fetch_assoc()) {
-    if($row["c_name = $id"]){
-      print('Customer Name' . $row["c_name"].'<br>\n');
-    }
-  }
-  }
-  else {
-    //handle form input  
-    $stmt = $conn->prepare("insert into students values (?, ?)");  
-    $id = $_POST['id'];  
-    $name = $_POST['name'];  
-    $ok = $stmt->bind_param("is", $sid, $name);  
-    if (!$ok) { 
+$stmt = $conn->prepare("SELECT * FROM Customer WHERE cust_name = ?");
+$ok = $stmt->bind_param("is", $sid, $c_name);
+if (!$ok) { 
       die("Bind param error"); 
       }  
       $ok=$stmt->execute();  
       if (!$ok) { 
         die("Exec error"); 
-        }  
-        echo 'Data inserted <a href="index.php">OK</a>';
-	  
+        } 
+	$result = $stmt->get_result();
+	}
+	}
+
+  while($row = $result->fetch_assoc()) {
+    if($row["c_name = $id"]){
+      print('Customer Name' . $row["c_name"].'<br>\n');
+    }
   }
 
   $mysqli->close();
