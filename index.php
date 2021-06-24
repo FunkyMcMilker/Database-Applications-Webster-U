@@ -9,12 +9,27 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
+	
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">WebSiteName</a>
+    </div>
+    <ul class="nav navbar-nav">
+      <li><a href="#">Kaiah's Studio</a></li>
+      <li><a href="?page1">Customers</a></li>
+      <li><a href="?page2">Rooms</a></li>
+      <li><a href="?page2">Staff</a></li>
+      <li><a href="?page3">Instruments</a></li>
+    </ul>
+  </div>
+</nav>
 
 <?php
   $db_host = 'localhost';
-  $db_user = 'root';
-  $db_password = 'root';
-  $db_db = 'Recording_Studio';
+  $db_user = 'studio';
+  $db_password = 'studio';
+  $db_db = 'myStudio';
   $db_port = 8889;
 
   $mysqli = new mysqli(
@@ -38,19 +53,21 @@
   echo 'Protocol version: '.$mysqli->protocol_version;
 
 
+function($conn){
+	$sql = "SELECT c_name FROM Customer";
+	$result = $conn->query($sql);
 
-$sql = "SELECT c_name FROM Customer ";
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-  // output data of each row
-  while($row = $result->fetch_assoc()) {
-    echo "Name: " . $row["c_name"];
-  }
-} else {
-  echo "0 results";
+	if ($result->num_rows > 0) {
+	  // output data of each row
+	  while($row = $result->fetch_assoc()) {
+	    echo "Name: " . $row["c_name"];
+	  }
+	} else {
+	  echo "0 results";
+	}
 }
 
+echo '<h2>Customer Search</h2>'
 echo '<form method="post" action="$_SERVER[PHP_SELF]">';
 echo 'Enter Customer name : <input type="text" name="cust_name">';
 echo '<br/>';
@@ -82,7 +99,8 @@ if($_POST['cust_name']) {
         die("Exec error"); 
         }  
         echo 'Data inserted <a href="index.php">OK</a>';
-
+	  
+  }
 
   $mysqli->close();
 ?>
