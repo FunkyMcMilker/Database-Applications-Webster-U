@@ -24,6 +24,24 @@
     </ul>
   </div>
 </nav>
+	
+<div class="container">
+  <form method="POST">
+    <div class="form-group">
+      <label for="Customer_name">Student ID</label>
+      <input type="text" required min="1" maxlength="20" class="form-control" id="Customer_name" placeholder="Enter New Customer Name" name="Customer_name">
+    </div>
+    <div class="form-group">
+      <label for="s_room">Studio Room</label>
+      <input type="number" required maxlength="2" class="form-control" id="s_room" placeholder="Enter Requested Studio Room" name="s_room">
+    </div>
+    <div class="form-group">
+      <label for="Staff_Name">Requested Staff</label>
+      <input type="text" class="form-control" id="Staff_name" placeholder="Enter Requested Staff Name" name="Staff_name">
+    </div>
+    <button type="submit" class="btn btn-default">Submit</button>
+  </form>
+</div>
 
 <?php
 error_reporting(E_ALL);
@@ -98,6 +116,22 @@ if (!$ok) {
       print('Customer Name' . $row["c_name"].'<br>\n');
     }
   }
+
+if (isset($_POST['Customer_name'])) {
+   $Customer_name = $_POST['Customer_name'];
+   $s_room = $_POST['s_room'];
+   $Staff_name = $_POST['Staff_name'];
+   $sql = "insert into Customer (Customer_name,s_room,Staff_name) values (?,?,?)";
+   // prepare statement
+   $sta = mysqli_prepare($conn, $sql);
+   echo $conn->errno;
+   mysqli_stmt_bind_param($sta, 'iss', $Customer_name, $s_room, $Staff_name);
+   echo $conn->errno;
+   $sta->execute();
+echo $conn->errno;
+echo $sta;
+}
+	
 
   $mysqli->close();
 ?>
