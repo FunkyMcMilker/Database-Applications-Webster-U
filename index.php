@@ -25,6 +25,16 @@
   </div>
 </nav>
 	
+<div>
+	<form method="POST">
+		<h2>Customer Search</h2>
+		<label for="cust_name">Enter Customer Name</label>
+		<input type="text" required maxlength="20" name="cust_name">
+		<button type="submit" value="Submit">
+	</form>
+</div>
+	
+<br>
 	
 <div class="container">
   <form method="POST">
@@ -91,13 +101,6 @@ function customers($conn){
 	}
 }
 
-echo '<h2>Customer Search</h2>';
-echo '<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">';
-echo 'Enter Customer name : <input type=\"text\" name=\"cust_name\">';
-echo '<br/>';
-echo '<button type=\"submit\" value=\"Submit\">'; 
-echo '</form>'; 
-
 if($_POST['cust_name']) {
   $id = $_POST['cust_name'];
 $stmt = $conn->prepare("SELECT * FROM Customer WHERE cust_name = ?");
@@ -118,6 +121,8 @@ if (!$ok) {
       print('Customer Name' . $row["c_name"].'<br>\n');
     }
   }
+	
+#php handling  new customer input
 
 if (isset($_POST['Customer_name'])) {
    $Customer_name = $_POST['Customer_name'];
