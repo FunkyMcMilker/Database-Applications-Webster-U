@@ -25,10 +25,12 @@
   </div>
 </nav>
 	
+	
 <div class="container">
   <form method="POST">
+	  <h2>Input New Customers</h2>
     <div class="form-group">
-      <label for="Customer_name">Student ID</label>
+      <label for="Customer_name">Customer Name</label>
       <input type="text" required min="1" maxlength="20" class="form-control" id="Customer_name" placeholder="Enter New Customer Name" name="Customer_name">
     </div>
     <div class="form-group">
@@ -93,7 +95,7 @@ echo '<h2>Customer Search</h2>';
 echo '<form method=\"post\" action=\"$_SERVER[PHP_SELF]\">';
 echo 'Enter Customer name : <input type=\"text\" name=\"cust_name\">';
 echo '<br/>';
-echo '<input type=\"submit\" value=\"Submit\">'; 
+echo '<button type=\"submit\" value=\"Submit\">'; 
 echo '</form>'; 
 
 if($_POST['cust_name']) {
@@ -109,7 +111,7 @@ if (!$ok) {
         } 
 	$result = $stmt->get_result();
 	}
-	}
+	
 
   while($row = $result->fetch_assoc()) {
     if($row["c_name = $id"]){
