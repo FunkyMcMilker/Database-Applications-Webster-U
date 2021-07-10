@@ -61,6 +61,20 @@ ini_set('display_errors', 1);
 
 #functions
 
+function homePage($mysqli){
+  $sql = "SELECT * FROM Customers";
+  $result = $mysqli->query($sql);
+
+  if ($result->num_rows > 0) {
+    // output data of each row
+    while($row = $result->fetch_assoc()) {
+      echo "Name: " . $row["customer_name"];
+    }
+  } else {
+    echo "0 results";
+  }
+}
+
 function customers($mysqli){
   echo '
   <div>
