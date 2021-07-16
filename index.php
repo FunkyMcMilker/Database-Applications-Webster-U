@@ -44,7 +44,7 @@
 #functions
 
 function homePage($mysqli){
-  $sql = "SELECT * FROM Customers";
+  $sql = "SELECT * FROM Customer";
   $result = $mysqli->query($sql);
 
   if ($result->num_rows > 0) {
@@ -93,13 +93,13 @@ function customers($mysqli){
         ';
 
   #print customer info
-	$sql = "SELECT c_name FROM Customer";
+	$sql = "SELECT customer_name FROM Customer";
 	$result = $mysqli->query($sql);
 
 	if ($result->num_rows > 0) {
 	  // output data of each row
 	  while($row = $result->fetch_assoc()) {
-	    echo "Name: " . $row["c_name"];
+	    echo "Name: " . $row["customer_name"];
 	  }
 	}
   else {
@@ -109,7 +109,7 @@ function customers($mysqli){
 
   if($_POST['cust_name']) {
     $id = $_POST['cust_name'];
-  $stmt = $mysqli->prepare("SELECT * FROM Customer WHERE cust_name = ?");
+  $stmt = $mysqli->prepare("SELECT * FROM Customer WHERE customer_name = ?");
   $ok = $stmt->bind_param("is", $id, $customer_name);
   if (!$ok) {
         die("Bind param error");
@@ -134,11 +134,11 @@ function customers($mysqli){
      $Customer_name = $_POST['Customer_name'];
      $s_room = $_POST['s_room'];
      $Staff_name = $_POST['Staff_name'];
-     $sql = "insert into Customer (customer_name,studio_room, employee_name) values (?,?,?)";
+     $sql = "insert into Customer (customer_name, studio_id, employee_name) values (?,?,?)";
      // prepare statement
      $sta = mysqli_prepare($mysqli, $sql);
      echo $mysqli->errno;
-     mysqli_stmt_bind_param($sta, 'isss', $Customer_name, $studio_room, $Staff_name);
+     mysqli_stmt_bind_param($sta, 'isss', $Customer_name, $s_room, $Staff_name);
      echo $mysqli->errno;
      $sta->execute();
   echo $mysqli->errno;
@@ -161,7 +161,7 @@ function gear($mysqli){
 
   if($_POST['gear_id']) {
     $id = $_POST['gear_id'];
-  $stmt = $mysqli->prepare("SELECT customer_name FROM Customers WHERE instrument_id = ?");
+  $stmt = $mysqli->prepare("SELECT customer_name FROM Customer WHERE instrument_id = ?");
   $stmt1 = $mysqli->prepare("SELECT * FROM Equipment WHERE equipment_id = ?");
   $ok = $stmt->bind_param("is", $id, $instrument_id);
   $ok1 = $stmt1->bind_param("is", $id, $equipment_id);
@@ -189,7 +189,7 @@ function gear($mysqli){
     echo '<h3>Cusomers that have used this : </h3>';
     while($row = $result->fetch_assoc()) {
       if($row["instrument_id = $id"]){
-        print('Customers Name : ' . $row["Customer_name"].'<br>\n');
+        print('Customers Name : ' . $row["customer_name"].'<br>\n');
       }
     }
 
@@ -215,7 +215,7 @@ function rooms($mysqli){
 
     if($_POST['room_id']) {
         $id = $_POST['room_id'];
-      $stmt = $mysqli->prepare("SELECT customer_name FROM Cusomers WHERE studio_id = ?");
+      $stmt = $mysqli->prepare("SELECT customer_name FROM Customer WHERE studio_id = ?");
       $ok = $stmt->bind_param("is", $id, $studio_id);
       $stmt1 = $mysqli->prepare("SELECT equipment_name FROM Equipment WHERE studio_id = ?");
       $ok1 = $stmt->bind_param("is", $id, $studio_id);
@@ -293,7 +293,7 @@ function staff($mysqli){
   if ($result->num_rows > 0) {
     // output data of each row
     while($row = $result->fetch_assoc()) {
-      echo "Name: " . $row["c_name"];
+      echo "Name: " . $row["customer_name"];
     }
   }
   else {
