@@ -1,25 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <title>Bootstrap Example</title>
+  <title>Kaiah's Studio</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
+
+
 <body>
 
 <nav class="navbar navbar-default">
   <div class="container-fluid">
     <div class="navbar-header">
-      <a class="navbar-brand" href="#">Kaiah's Recording Studio</a>
+      <a class="navbar-brand" href="?page=homePage">Kaiah's Recording Studio</a>
     </div>
     <ul class="nav navbar-nav">
-      <li><a href="?page1">Customers</a></li>
-      <li><a href="?page2">Rooms</a></li>
-      <li><a href="?page3">Staff</a></li>
-      <li><a href="?page4">Gear</a></li>
+      <li><a href="?page=customers">Customers</a></li>
+      <li><a href="?page=rooms">Rooms</a></li>
+      <li><a href="?page=staff">Staff</a></li>
+      <li><a href="?page=gear">Gear</a></li>
       <li><a href="https://github.com/FunkyMcMilker/Database-Applications-Webster-U/wiki">Help</a></li>
     </ul>
   </div>
@@ -29,8 +31,8 @@
 
 #database connection
 
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+#error_reporting(E_ALL);
+#ini_set('display_errors', 1);
 
 
   $db_host = 'localhost';
@@ -38,26 +40,6 @@ ini_set('display_errors', 1);
   $db_password = 'studio';
   $db_db = 'myStudio';
   $db_port = 8889;
-
-  $mysqli = new mysqli(
-    $db_host,
-    $db_user,
-    $db_password,
-    $db_db
-  );
-
-  if ($mysqli->connect_error) {
-    echo 'Errno: '.$mysqli->connect_errno;
-    echo '<br>';
-    echo 'Error: '.$mysqli->connect_error;
-    exit();
-  }
-
-  echo 'Success: A proper connection to MySQL was made.';
-  echo '<br>';
-  echo 'Host information: '.$mysqli->host_info;
-  echo '<br>';
-  echo 'Protocol version: '.$mysqli->protocol_version;
 
 #functions
 
@@ -70,7 +52,8 @@ function homePage($mysqli){
     while($row = $result->fetch_assoc()) {
       echo "Name: " . $row["customer_name"];
     }
-  } else {
+  }
+  else {
     echo "0 results";
   }
 }
@@ -118,17 +101,16 @@ function customers($mysqli){
 	  while($row = $result->fetch_assoc()) {
 	    echo "Name: " . $row["c_name"];
 	  }
-	} else {
+	}
+  else {
 	  echo "0 results";
 	}
-
-
   #database functionality
 
   if($_POST['cust_name']) {
     $id = $_POST['cust_name'];
   $stmt = $mysqli->prepare("SELECT * FROM Customer WHERE cust_name = ?");
-  $ok = $stmt->bind_param("is", $sid, $customer_name);
+  $ok = $stmt->bind_param("is", $id, $customer_name);
   if (!$ok) {
         die("Bind param error");
         }
@@ -156,14 +138,14 @@ function customers($mysqli){
      // prepare statement
      $sta = mysqli_prepare($mysqli, $sql);
      echo $mysqli->errno;
-     mysqli_stmt_bind_param($sta, 'iss', $Customer_name, $studio_room, $Staff_name);
+     mysqli_stmt_bind_param($sta, 'isss', $Customer_name, $studio_room, $Staff_name);
      echo $mysqli->errno;
      $sta->execute();
   echo $mysqli->errno;
   echo $sta;
   }
 
-};
+}
 
 function gear($mysqli){
   echo '
@@ -181,8 +163,8 @@ function gear($mysqli){
     $id = $_POST['gear_id'];
   $stmt = $mysqli->prepare("SELECT customer_name FROM Customers WHERE instrument_id = ?");
   $stmt1 = $mysqli->prepare("SELECT * FROM Equipment WHERE equipment_id = ?");
-  $ok = $stmt->bind_param("is", $sid, $instrument_id);
-  $ok1 = $stmt1->bind_param("is", $sid, $equipment_id);
+  $ok = $stmt->bind_param("is", $id, $instrument_id);
+  $ok1 = $stmt1->bind_param("is", $id, $equipment_id);
   if (!$ok) {
         die("Bind param error");
         }
@@ -191,7 +173,7 @@ function gear($mysqli){
           die("Exec error");
           }
     $result = $stmt->get_result();
-    }
+
 
     if (!$ok1) {
           die("Bind param error");
@@ -201,7 +183,8 @@ function gear($mysqli){
             die("Exec error");
             }
       $result1 = $stmt1->get_result();
-      }
+
+    }
 
     echo '<h3>Cusomers that have used this : </h3>';
     while($row = $result->fetch_assoc()) {
@@ -216,37 +199,37 @@ function gear($mysqli){
         print('Equipment Name' . $row["equipment_id"].'<br>\n');
       }
     }
-};
+}
 
 function rooms($mysqli){
-  echo '<h2>Room Info</h2>;
-  <div>
-    <form method="POST">
-      <h2>Room Info</h2>
-      <label for="room_id">Enter Room ID</label>
-      <input type="number" required maxlength="20" name="room_id">
-      <button type="submit" class="btn btn-default">Submit</button>
-    </form>
-  </div>
-  ';
+    echo '<h2>Room Info</h2>;
+    <div>
+      <form method="POST">
+        <h2>Room Info</h2>
+        <label for="room_id">Enter Room ID</label>
+        <input type="number" required maxlength="20" name="room_id">
+        <button type="submit" class="btn btn-default">Submit</button>
+      </form>
+    </div>
+    ';
 
-  if($_POST['room_id']) {
-    $id = $_POST['room_id'];
-  $stmt = $mysqli->prepare("SELECT customer_name FROM Cusomers WHERE studio_id = ?");
-  $ok = $stmt->bind_param("is", $sid, $studio_id);
-  $stmt1 = $mysqli->prepare("SELECT equipment_name FROM Equipment WHERE studio_id = ?");
-  $ok1 = $stmt->bind_param("is", $sid, $studio_id);
-  $stmt2 = $mysqli->prepare("SELECT employee_name FROM Employees WHERE studio_id = ?");
-  $ok2 = $stmt->bind_param("is", $sid, $studio_id);
-  if (!$ok) {
-        die("Bind param error");
-        }
-        $ok=$stmt->execute();
-        if (!$ok) {
-          die("Exec error");
-          }
-    $result = $stmt->get_result();
-    }
+    if($_POST['room_id']) {
+        $id = $_POST['room_id'];
+      $stmt = $mysqli->prepare("SELECT customer_name FROM Cusomers WHERE studio_id = ?");
+      $ok = $stmt->bind_param("is", $id, $studio_id);
+      $stmt1 = $mysqli->prepare("SELECT equipment_name FROM Equipment WHERE studio_id = ?");
+      $ok1 = $stmt->bind_param("is", $id, $studio_id);
+      $stmt2 = $mysqli->prepare("SELECT employee_name FROM Employees WHERE studio_id = ?");
+      $ok2 = $stmt->bind_param("is", $id, $studio_id);
+      if (!$ok) {
+            die("Bind param error");
+            }
+            $ok=$stmt->execute();
+            if (!$ok) {
+              die("Exec error");
+              }
+        $result = $stmt->get_result();
+
 
     if (!$ok1) {
           die("Bind param error");
@@ -256,7 +239,7 @@ function rooms($mysqli){
             die("Exec error");
             }
       $result1 = $stmt->get_result();
-      }
+
 
       if (!$ok2) {
             die("Bind param error");
@@ -266,7 +249,7 @@ function rooms($mysqli){
               die("Exec error");
               }
         $result2 = $stmt->get_result();
-        }
+    }
 
     echo '<h3>Cusomers that have used this Room : </h3>';
     while($row = $result->fetch_assoc()) {
@@ -289,7 +272,8 @@ function rooms($mysqli){
       }
     }
 
-};
+}
+
 
 function staff($mysqli){
   echo '
@@ -301,8 +285,7 @@ function staff($mysqli){
       <button type="submit" class="btn btn-default">Submit</button>
     </form>
   </div>
-  '
-  ;
+  ';
 
   $sql = "SELECT employee_id FROM Employees";
   $result = $mysqli->query($sql);
@@ -312,7 +295,8 @@ function staff($mysqli){
     while($row = $result->fetch_assoc()) {
       echo "Name: " . $row["c_name"];
     }
-  } else {
+  }
+  else {
     echo "0 results";
   }
 
@@ -331,8 +315,7 @@ function staff($mysqli){
           die("Exec error");
           }
     $result = $stmt->get_result();
-    }
-
+  }
 
     while($row = $result->fetch_assoc()) {
       if($row["employee_id = $id"]){
@@ -340,24 +323,45 @@ function staff($mysqli){
       }
     }
 
-};
 
-#page contraints and display
-
-$page = $_SERVER['QUERY_STRING'];
-if ($page == "") {
-echo 'Home Page';
 }
-if ($page == "page1") {
+
+//page contraints and display and connection to db
+
+$mysqli = new mysqli(
+  $db_host,
+  $db_user,
+  $db_password,
+  $db_db
+);
+
+if ($mysqli->connect_error) {
+  echo 'Errno: '.$mysqli->connect_errno;
+  echo '<br>';
+  echo 'Error: '.$mysqli->connect_error;
+  exit();
+}
+
+echo 'Success: A proper connection to MySQL was made.';
+echo '<br>';
+echo 'Host information: '.$mysqli->host_info;
+echo '<br>';
+echo 'Protocol version: '.$mysqli->protocol_version;
+
+$page = $_GET['page'];
+if ($page == "homePage" || $page == "") {
+  homePage($mysqli);
+}
+if ($page == "customers") {
     customers($mysqli);
     }
-if ($page == "page2") {
+elseif ($page == "rooms") {
     rooms($mysqli);
     }
-if ($page == "page3") {
+elseif ($page == "staff") {
     staff($mysqli);
     }
-if ($page == "page4") {
+elseif ($page == "gear") {
     gear($mysqli);
     }
 
