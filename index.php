@@ -306,7 +306,7 @@ function staff($mysqli){
   if($_POST['staff_id']) {
     $id = $_POST['staff_id'];
   $stmt = $mysqli->prepare("SELECT employee_name FROM Employees WHERE employee_id = ?");
-  $ok = $stmt->bind_param("is", $sid, $employee_name);
+  $ok = $stmt->bind_param("s", $sid, $employee_name);
   if (!$ok) {
         die("Bind param error");
         }
