@@ -110,7 +110,7 @@ function customers($mysqli){
   if($_POST['cust_name']) {
     $id = $_POST['cust_name'];
   $stmt = $mysqli->prepare("SELECT * FROM Customer WHERE customer_name = ?");
-  $ok = $stmt->bind_param("is", $id, $customer_name);
+  $ok = $stmt->bind_param("s", $id, $customer_name);
   if (!$ok) {
         die("Bind param error");
         }
@@ -163,8 +163,8 @@ function gear($mysqli){
     $id = $_POST['gear_id'];
   $stmt = $mysqli->prepare("SELECT customer_name FROM Customer WHERE instrument_id = ?");
   $stmt1 = $mysqli->prepare("SELECT * FROM Equipment WHERE equipment_id = ?");
-  $ok = $stmt->bind_param("is", $id, $instrument_id);
-  $ok1 = $stmt1->bind_param("is", $id, $equipment_id);
+  $ok = $stmt->bind_param("s", $id, $instrument_id);
+  $ok1 = $stmt1->bind_param("s", $id, $equipment_id);
   if (!$ok) {
         die("Bind param error");
         }
@@ -216,11 +216,11 @@ function rooms($mysqli){
     if($_POST['room_id']) {
         $id = $_POST['room_id'];
       $stmt = $mysqli->prepare("SELECT customer_name FROM Customer WHERE studio_id = ?");
-      $ok = $stmt->bind_param("is", $id, $studio_id);
+      $ok = $stmt->bind_param("s", $id, $studio_id);
       $stmt1 = $mysqli->prepare("SELECT equipment_name FROM Equipment WHERE studio_id = ?");
-      $ok1 = $stmt->bind_param("is", $id, $studio_id);
+      $ok1 = $stmt->bind_param("s", $id, $studio_id);
       $stmt2 = $mysqli->prepare("SELECT employee_name FROM Employees WHERE studio_id = ?");
-      $ok2 = $stmt->bind_param("is", $id, $studio_id);
+      $ok2 = $stmt->bind_param("s", $id, $studio_id);
       if (!$ok) {
             die("Bind param error");
             }
